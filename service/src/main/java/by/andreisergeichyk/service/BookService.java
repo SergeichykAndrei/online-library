@@ -5,6 +5,8 @@ import by.andreisergeichyk.dto.book.ViewFullInfoBookDto;
 import by.andreisergeichyk.dto.book.ViewMainInfoBookDto;
 import by.andreisergeichyk.entity.Book;
 import by.andreisergeichyk.repository.BookRepository;
+import by.andreisergeichyk.repository.CommentRepository;
+import by.andreisergeichyk.repository.MarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +21,15 @@ import java.util.List;
 public class BookService {
 
     private BookRepository bookRepository;
+    private CommentRepository commentRepository;
+    private MarkRepository markRepository;
     private ModelToDtoConverter modelToDtoConverter;
 
     @Autowired
-    public BookService(BookRepository bookRepository, ModelToDtoConverter modelToDtoConverter) {
+    public BookService(BookRepository bookRepository, ModelToDtoConverter modelToDtoConverter,
+                       CommentRepository commentRepository, MarkRepository markRepository) {
+        this.commentRepository = commentRepository;
+        this.markRepository = markRepository;
         this.bookRepository = bookRepository;
         this.modelToDtoConverter = modelToDtoConverter;
     }
@@ -32,6 +39,8 @@ public class BookService {
     }
 
     public void delete(Long bookId) {
+        commentRepository.deleteAllByBookId(bookId);
+        markRepository.deleteAllByBookId(bookId);
         bookRepository.deleteById(bookId);
     }
 

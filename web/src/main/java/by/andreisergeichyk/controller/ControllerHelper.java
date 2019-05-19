@@ -25,14 +25,14 @@ public class ControllerHelper {
         return "error-optimistic-lock";
     }
 
-//    @ExceptionHandler(value = {Exception.class})
-//    public ModelAndView handleException(HttpServletRequest request, Exception e) {
-//        ModelAndView mav = new ModelAndView(DEFAULT_ERROR_VIEW);
-//
-//        LOGGER.info(LocalDateTime.now(ZoneId.systemDefault()));
-//        LOGGER.info(request.getRequestURL());
-//        LOGGER.info(e.getMessage());
-//
-//        return mav;
-//    }
+    @ExceptionHandler(value = {Exception.class})
+    public ModelAndView handleException(HttpServletRequest request, Exception e) {
+        ModelAndView mav = new ModelAndView(DEFAULT_ERROR_VIEW);
+
+        LOGGER.info(LocalDateTime.now(ZoneId.systemDefault()));
+        LOGGER.info(request.getRequestURL());
+        LOGGER.info(e.getMessage());
+
+        return mav;
+    }
 }

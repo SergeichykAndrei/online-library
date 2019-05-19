@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>genres</title>
+</head>
+<body>
+<div th:insert="~{header::main}"></div>
+<div>
+    <a th:href="@{/main}"
+       th:text="#{on.the.main}">
+    </a>
+</div>
+<p th:if="${resultMessage}!=null" th:text="#{${resultMessage}}" style="color: red"></p>
+<div><p><a th:href="@{/handbooks/genres/addGenre}" th:text="#{genre.add.genre}"></a><br></p></div>
+<div>
+    <table>
+        <caption th:text="#{main.handbooks.genres}"></caption>
+        <tbody th:each="genre:${genres}">
+        <tr>
+            <td th:text="${genre.getName()}"></td>
+            <td>
+                <a th:href="@{/handbooks/genres/genreDelete(genreId=${genre.getId()})}"
+                   th:text="#{account.delete}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

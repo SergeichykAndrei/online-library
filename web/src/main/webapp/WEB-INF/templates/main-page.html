@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main-page</title>
+    <script src="/resource/js/jquery-3.2.1.min.js"></script>
+    <script src="/resource/js/search-books.js"></script>
+</head>
+<body>
+<div>
+    <div th:insert="~{header::main}"></div>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <p><a th:href="@{/handbooks}" th:text="#{main.handbooks}"></a><br></p>
+        <p><a th:href="@{/addBook}" th:text="#{main.addbook}"></a><br></p>
+    </div>
+    <div>
+        <a th:href="@{/userAccount(username=${#authentication.getName()})}"
+           th:text="#{account.books}">
+        </a>
+    </div>
+    <p><span th:text="#{main.welcome}+${#authentication.getName()}">welcome</span></p>
+    <div>
+        <form th:object="${searcher}">
+            <div>
+                <label for="searchLine" th:text="#{main.search}"></label>
+                <input id="searchLine" type="search" name="searchLine" th:field="*{searchLine}">
+            </div>
+            <div>
+                <label for="authorSearch" th:text="#{main.author.search.radio}"></label>
+                <input id="authorSearch" type="radio" name="searchMethod" required value="false"
+                       th:field="*{searchMethod}"><br>
+                <label for="bookSearch" th:text="#{main.book.search.radio}"></label>
+                <input id="bookSearch" type="radio" name="searchMethod" value="true" th:field="*{searchMethod}">
+                <input type="button" th:value="#{main.find}" onclick="findBooks()">
+            </div>
+            <div><h5 th:text="#{main.genres}"></h5></div>
+            <div>
+                <a th:href="@{/main}" th:text="#{main.all.books}">all books</a>
+            </div>
+            <div th:each="genre : ${genres}">
+                <input type="checkbox"
+                       name="genreIds"
+                       th:value="${genre.getId()}"
+                       th:field="*{genresIds}"
+                       onclick="findBooks()" onchange="findBooks()">
+                <span th:text="${genre.getName()}">genre</span>
+            </div>
+            <div th:if="${not #lists.isEmpty(books)}">
+                <label th:text="#{main.found.books}" for="countFoundBooks">Found books</label>
+                <span th:text="${books.getTotalElements()}" id="countFoundBooks"></span>
+            </div>
+            <div id="divBooks">
+                <div th:each="book:${books}" id="bookId">
+                    <p th:text="${book.name}" id="bookName"></p>
+                    <a th:href="@{/bookInfo(bookId=${book.getId()})}" id="bookHref">
+                        <img th:attr="src=${book.image}" alt="book" id="bookImg">
+                    </a><br>
+                    <span th:text="#{main.book.mark}"></span>
+                    <span th:text="${#numbers.formatDecimal(book.avgMark, 1, 2)}" id="bookAvg"></span><br>
+                    <span th:text="#{main.book.genre}"></span>
+                    <span th:text="${book.genre}" id="bookGenre"></span><br>
+                    <span th:text="#{main.book.number.copies}"></span>
+                    <span th:text="${book.getNumberCopies()}" id="bookCopies"></span><br>
+                    <span th:text="#{main.book.author}"></span>
+                    <span th:text="${book.getAuthor()}" id="bookAuthor"></span><br>
+                </div>
+            </div>
+            <div id="selectPage">
+                <select name="currentPage" id="currentPage" onchange="findBooks()">
+                    <option th:each="page : ${#numbers.sequence(1, books.getTotalPages())}"
+                            th:text="${page}"
+                            th:value="${page}"
+                            th:field="*{currentPage}"
+                            th:selected="${page == searcher.getCurrentPage()}">page
+                    </option>
+                </select>
+                <label for="currentPage" th:text="#{main.current.page}"></label>
+            </div>
+            <div>
+                <select name="numberOfBooksOnPage" id="numberOfBooksOnPage" onchange="findBooks()">
+                    <option th:each="numberOfBooksOnPage : ${#numbers.sequence(1, 5)}"
+                            th:text="${numberOfBooksOnPage}"
+                            th:value="${numberOfBooksOnPage}"
+                            th:field="*{numberOfBooksOnPage}"
+                            th:selected="${numberOfBooksOnPage==searcher.getNumberOfBooksOnPage()}"></option>
+                </select>
+                <label for="numberOfBooksOnPage" th:text="#{main.number.of.book}"></label>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

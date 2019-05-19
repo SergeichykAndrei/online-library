@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <p>
+        <a href="?language=en_US" th:text="#{choose.english}"></a>
+        <a href="?language=ru_RU" th:text="#{choose.russian}"></a>
+    </p>
+</div>
+<a th:href="@{/login}" th:text="#{login}">login</a>
+<h1 th:text="#{registration}">form</h1>
+<div>
+    <form th:action="@{/registration}" method="post" th:object="${account}">
+        <div>
+            <label for="username" th:text="#{registration.username}">username</label>
+            <input type="text" id="username" th:field="*{username}">
+            <p th:each="err : ${#fields.errors('username')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="password" th:text="#{registration.password}"></label>
+            <input type="password" id="password" th:field="*{password}">
+            <p th:each="err : ${#fields.errors('password')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="email" th:text="#{registration.email}"></label>
+            <input type="email" id="email" th:field="*{email}">
+            <p th:each="err : ${#fields.errors('email')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="phone" th:text="#{registration.phone}"></label>
+            <input type="tel" id="phone" th:field="*{phone}" placeholder="+375 (xx) yyy-yy-yy">
+            <p th:each="err : ${#fields.errors('phone')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="role" th:text="#{registration.role}"></label>
+            <select name="role" id="role" th:field="*{roleId}">
+                <option th:each="role:${roles}"
+                        th:text="${#strings.capitalize(#strings.toLowerCase(role.name))}"
+                        th:value="${role.id}">role
+                </option>
+            </select>
+        </div>
+        <input type="submit" th:value="#{registration}">
+    </form>
+</div>
+</body>
+</html>

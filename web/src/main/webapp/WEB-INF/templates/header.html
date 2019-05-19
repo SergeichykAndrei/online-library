@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+<div th:fragment="main">
+    <div>
+        <p>
+            <a href="?language=en_US" th:text="#{choose.english}"></a>
+            <a href="?language=ru_RU" th:text="#{choose.russian}"></a>
+        </p>
+    </div>
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" th:value="#{logout}">
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

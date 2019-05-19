@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>add book</title>
+</head>
+<body>
+<div th:insert="~{header::main}"></div>
+<div>
+    <a th:href="@{/main}" th:text="#{on.the.main}"></a>
+</div>
+<h3 th:text="#{add.book.head}"></h3>
+<div>
+    <form th:action="@{/addBook}" method="post" th:object="${book}">
+        <div>
+            <input type="hidden" th:field="*{version}" th:value="${book.getVersion()}">
+            <input type="hidden" th:field="*{id}" th:value="${book.getId()}">
+        </div>
+        <div>
+            <label for="name" th:text="#{add.book.name}"></label>
+            <input id="name" type="text" th:field="*{name}" placeholder="book name">
+            <p th:each="err : ${#fields.errors('name')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="image" th:text="#{add.book.image}"></label>
+            <input id="image" type="text" name="image" th:field="*{image}" placeholder="C:\image.jpg">
+            <p th:each="err : ${#fields.errors('image')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="genre" th:text="#{add.book.genre}"></label>
+            <select id="genre" name="genre" th:field="*{genre.id}">
+                <option th:each="genre:${genres}"
+                        th:text="${#strings.capitalize(#strings.toLowerCase(genre.name))}"
+                        th:value="${genre.id}">genre
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="author" th:text="#{add.book.author}"></label>
+            <select id="author" name="author" th:field="*{author.id}">
+                <option th:each="author:${authors}"
+                        th:text="${#strings.capitalize(#strings.toLowerCase(author.name))}"
+                        th:value="${author.id}">author
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="numberCopies" th:text="#{add.book.number.copies}"></label>
+            <input id="numberCopies" type="number" th:field="*{numberCopies}" placeholder="1">
+            <p th:each="err : ${#fields.errors('numberCopies')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <div>
+            <label for="description" th:text="#{add.book.description}"></label>
+            <input id="description" type="text" th:field="*{description}" placeholder="book description">
+            <p th:each="err : ${#fields.errors('description')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <input type="submit" th:value="#{add.save}">
+    </form>
+</div>
+</body>
+</html>

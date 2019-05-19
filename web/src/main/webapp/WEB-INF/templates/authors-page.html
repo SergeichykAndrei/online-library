@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>authors</title>
+</head>
+<body>
+<div th:insert="~{header::main}"></div>
+<a th:href="@{/main}"
+   th:text="#{on.the.main}">
+</a>
+<p th:if="${resultMessage}!=null" th:text="#{${resultMessage}}" style="color: red"></p>
+<div><p><a th:href="@{/handbooks/authors/addAuthor}" th:text="#{author.add.author}"></a><br></p></div>
+<div>
+    <table>
+        <caption th:text="#{main.handbooks.authors}"></caption>
+        <tbody th:each="author:${authors}">
+        <tr>
+            <td th:text="${author.getName()}"></td>
+            <td>
+                <a th:href="@{/handbooks/authors/authorDelete(authorId=${author.getId()})}"
+                   th:text="#{account.delete}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

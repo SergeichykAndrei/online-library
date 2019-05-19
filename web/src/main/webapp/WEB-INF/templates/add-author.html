@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>add author</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" th:value="#{logout}">
+    </form>
+</div>
+<div>
+    <a th:href="@{/main}" th:text="#{on.the.main}"></a>
+</div>
+<h3 th:text="#{add.author.head}"></h3>
+<div>
+    <form th:action="@{/handbooks/authors/addAuthor}" method="post" th:object="${author}">
+        <div>
+            <label for="authorName" th:text="#{add.name}"></label>
+            <input type="text" id="authorName" th:field="*{name}">
+            <p th:each="err : ${#fields.errors('name')}" th:text="#{${err}}" style="color: red"></p>
+        </div>
+        <input type="submit" th:value="#{add.save}">
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+    <script src="/resource/js/jquery-3.2.1.min.js"></script>
+    <script src="/resource/js/save-comment.js"></script>
+    <script th:inline="javascript">
+        let bookId = [[${book.getId()}]];
+        let username = [[${#authentication.getName()}]]
+    </script>
+</head>
+<body>
+<div>
+    <div th:insert="~{header::main}"></div>
+    <div>
+        <div>
+            <a th:href="@{/main}" th:text="#{on.the.main}"></a>
+        </div>
+        <p th:text="${book.getName()}" id="bookName"></p>
+        <img th:attr="src=${book.getImage()}" alt="book" id="bookImg"><br>
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <span><a th:href="@{/deleteBook(bookId=${book.getId()})}" th:text="#{main.delete.book}"></a></span>
+            <span><a th:href="@{/editBook(bookId=${book.getId()})}" th:text="#{main.edit.book}"></a><br></span>
+        </div>
+        <p th:if="${responseMessage != null}" th:text="#{book.response.error}" style="color: red"></p>
+        <span th:text="#{main.book.mark}"></span>
+        <span th:text="${#numbers.formatDecimal(book.getAvgMark(), 1, 2)}" id="bookAvg"></span><br>
+        <span th:text="#{main.book.genre}"></span>
+        <span th:text="${book.getGenre()}" id="bookGenre"></span><br>
+        <span th:text="#{main.book.author}"></span>
+        <span th:text="${book.getAuthor()}" id="bookAuthor"></span><br>
+        <span th:text="#{main.book.number.copies}"></span>
+        <span th:text="${book.getNumberCopies()}" id="bookCopies"></span><br>
+        <span th:text="#{book.info.description}"></span>
+        <span th:text="${book.getDescription()}"></span><br>
+        <div th:if="${book.getNumberCopies()>null}">
+            <a th:if="${book.getNumberCopies()>0}"
+               th:href="@{/userAccountSave(bookId=${book.getId()}, username=${#authentication.getName()})}"
+               th:text="#{book.info.order.book}">
+            </a>
+        </div>
+        <input type="text" id="comment" name="comment" th:placeholder="#{book.info.my.comment}">
+        <input type="button" onclick="saveComment(bookId, username)" th:value="#{book.info.leave.comment}"><br>
+        <span th:text="#{book.info.comments}"></span>
+        <div id="comments">
+            <div th:each="comment : ${book.getComments()}">
+                <span th:text="${comment.getAccountName()}+':'+${comment.getValue()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

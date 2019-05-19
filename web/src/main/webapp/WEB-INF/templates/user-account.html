@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account</title>
+</head>
+<body>
+<div th:insert="~{header::main}"></div>
+<div>
+    <a th:href="@{/main}" th:text="#{on.the.main}"></a>
+</div>
+<table>
+    <caption th:text="#{account.books}"></caption>
+    <thead>
+    <tr>
+        <th th:text="#{account.name}"></th>
+        <th th:text="#{account.book.name}"></th>
+        <th th:text="#{account.date.issue}"></th>
+        <th th:text="#{account.date.return}"></th>
+    </tr>
+    </thead>
+    <tbody th:each="accountBook:${accountBooks}">
+    <tr>
+        <td th:text="${accountBook.getAccountName()}"></td>
+        <td th:text="${accountBook.getBookName()}"></td>
+        <td th:text="${accountBook.getDateIssue()}"></td>
+        <td th:text="${accountBook.getDateReturn()}"></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <a th:href="@{/userAccountDelete(bookId=${accountBook.getBookId()}, username=${#authentication.getName()})}" th:text="#{account.delete}"></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
